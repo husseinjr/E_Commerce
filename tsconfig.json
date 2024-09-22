@@ -5,6 +5,8 @@
     "strict": true,
     "module": "CommonJS",
     "esModuleInterop": true,
-    "allowJs": true
+    "allowJs": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   }
 }

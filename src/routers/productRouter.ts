@@ -1,0 +1,23 @@
+import express, { Request, Response} from 'express'
+import asyncHandler from 'express-async-handler'
+import db from '../Database/connection/dbCon'
+export const productRouter = express.Router()
+
+productRouter.get(
+  '/',
+  asyncHandler(async (req:Request, res: Response) => {
+    const products = await db.models.Product.findAll();
+    res.status(201).json(products);
+  })
+);
+
+
+productRouter.get(
+  '/slug/:slug',
+  asyncHandler(async (req:Request, res: Response) => {
+    const products = await db.models.Product.findAll({where: {
+      slug: req.params
+    }});
+    res.status(201).json(products);
+  })
+)
