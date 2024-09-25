@@ -17,11 +17,11 @@ type UserCreationAttributes = Optional<
   'id' | 'createdAt' | 'updatedAt' | 'deletedAt'
 >
 class User extends Model<UserAttributes, UserCreationAttributes> {
-    id: any
-    name: any
-    email: any
-    isAdmin: any
-    password: any
+    declare id: string
+    declare name: string
+    declare email: string
+    declare isAdmin: boolean
+    declare password: string
 }
 
 User.init(
