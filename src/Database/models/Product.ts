@@ -18,7 +18,7 @@ interface ProductAttributes {
   deletedAt?: Date | null
 }
 type ProductCreationAttributes = Optional<
-  ProductAttributes,
+ProductAttributes,
   'id' | 'createdAt' | 'updatedAt' | 'deletedAt'
 >
 class Product extends Model<ProductAttributes, ProductCreationAttributes> {}
@@ -83,6 +83,7 @@ Product.init(
   },
   {
     sequelize: db,
+    modelName: 'Product',
     tableName: 'products',
     createdAt: true,
     paranoid: true,

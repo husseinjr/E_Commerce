@@ -5,9 +5,9 @@ import hash from '../../services/hashPassword'
 interface UserAttributes {
   id: string
   name: string
-  isAdmin: boolean
   email: string
   password: string
+  isAdmin: boolean
   createdAt?: Date
   updatedAt?: Date
   deletedAt?: Date | null
@@ -16,7 +16,13 @@ type UserCreationAttributes = Optional<
   UserAttributes,
   'id' | 'createdAt' | 'updatedAt' | 'deletedAt'
 >
-class User extends Model<UserAttributes, UserCreationAttributes> {}
+class User extends Model<UserAttributes, UserCreationAttributes> {
+    id: any
+    name: any
+    email: any
+    isAdmin: any
+    password: any
+}
 
 User.init(
   {
@@ -40,6 +46,7 @@ User.init(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true
     },
 
     password: {
@@ -52,9 +59,9 @@ User.init(
   },
   {
     sequelize: db,
+    modelName: 'User',
     tableName: 'users',
     createdAt: true,
-    paranoid: true,
   }
 )
 
