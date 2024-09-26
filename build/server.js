@@ -28,20 +28,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importStar(require("express"));
 const envConfig_1 = require("./envConfig");
-// import { sampleProducts } from './data'
-// import UserValidator from './validators/index'
 // import middleware from './middlewares/index'
-const productRouter_1 = require("./routers/productRouter");
 const dbSync_1 = __importDefault(require("./Database/connection/dbSync"));
+const productRouter_1 = require("./routers/productRouter");
+const userRouter_1 = require("./routers/userRouter");
+const seedRouters_1 = require("./routers/seedRouters");
+const path_1 = __importDefault(require("path"));
 dbSync_1.default;
 const app = (0, express_1.default)();
+// view engine
+app.set('view engine', 'ejs');
+app.set('views', path_1.default.join(__dirname, 'views'));
 app.use(express_1.default.json());
-app.use((0, express_1.urlencoded)({ extended: false }));
+app.use((0, express_1.urlencoded)({ extended: true }));
 const port = envConfig_1.PORT || 3000;
 app.get('/', (req, res) => {
     res.status(200).send('Home page');
 });
-app.get('/api/products', productRouter_1.productRouter);
+app.use('/api/products', productRouter_1.productRouter);
+app.use('/api/users', userRouter_1.userRouter);
+app.use('/test/data', seedRouters_1.seedRouter);
+app.use((req, res, next) => {
+    res.status(404).render('404');
+});
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
 });

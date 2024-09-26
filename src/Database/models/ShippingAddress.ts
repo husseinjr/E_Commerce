@@ -28,6 +28,7 @@ class ShippingAddress extends Model<
   declare country: string
   declare lat: number
   declare lng: number
+    id: any
 }
 
 ShippingAddress.init(

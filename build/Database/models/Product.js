@@ -55,6 +55,7 @@ Product.init({
     },
 }, {
     sequelize: dbCon_1.default,
+    modelName: 'Product',
     tableName: 'products',
     createdAt: true,
     paranoid: true,

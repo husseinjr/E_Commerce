@@ -24,8 +24,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DB_DATABASE_NAME = exports.DB_PASSWORD = exports.DB_USER = exports.PORT = void 0;
+exports.JWT_SECRET = exports.DB_DATABASE_NAME = exports.DB_PASSWORD = exports.DB_USER = exports.PORT = void 0;
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 // {path: "../.env"}
-_a = process.env, exports.PORT = _a.PORT, exports.DB_USER = _a.DB_USER, exports.DB_PASSWORD = _a.DB_PASSWORD, exports.DB_DATABASE_NAME = _a.DB_DATABASE_NAME;
+_a = process.env, exports.PORT = _a.PORT, exports.DB_USER = _a.DB_USER, exports.DB_PASSWORD = _a.DB_PASSWORD, exports.DB_DATABASE_NAME = _a.DB_DATABASE_NAME, exports.JWT_SECRET = _a.JWT_SECRET;

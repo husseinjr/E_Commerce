@@ -1,6 +1,28 @@
 import { Model, DataTypes, Optional } from 'sequelize'
 import db from '../connection/dbCon'
+import PaymentResult from './PaymentResult'
+import ShippingAddress from './ShippingAddress'
+import OrderItem from './Order_Item'
 
+// interface orderAttributes {
+//   id: string
+//   paymentMethod: string
+//   itemsPrice: number
+//   shippingPrice: number
+//   taxPrice: number
+//   totalPrice: number
+//   isPaid: boolean
+//   paidAt: Date
+//   isDelivered: boolean
+//   deliveredAt: Date
+//   userId?: string
+//   shippingAddress?: ShippingAddress
+//   paymentResult?: PaymentResult
+//   orderItems?: OrderItem[]
+//   createdAt?: Date
+//   updatedAt?: Date
+//   deletedAt?: Date | null
+// }
 interface orderAttributes {
   id: string
   paymentMethod: string
@@ -12,17 +34,34 @@ interface orderAttributes {
   paidAt: Date
   isDelivered: boolean
   deliveredAt: Date
+  userId: string // Add userId here
+  shippingAddress: {
+    fullName: string
+    address: string
+    city: string
+    postalCode: string
+    country: string
+    lat: number
+    lng: number
+  }
+  paymentResult: {
+    paymentId: string
+    status: string
+    update_time: Date
+    email_address: string
+  }
+  orderItems: {
+    name: string
+    quantity: number
+    price: number
+    productId: string
+  }[]
   createdAt?: Date
   updatedAt?: Date
   deletedAt?: Date | null
 }
 
-type OrderCreationAttributes = Optional<
-  orderAttributes,
-  'id' | 'createdAt' | 'updatedAt' | 'deletedAt'
->
-
-class Order extends Model<orderAttributes, OrderCreationAttributes> {
+class Order extends Model {
   declare id: string
   declare paymentMethod: string
   declare itemsPrice: number
@@ -33,8 +72,11 @@ class Order extends Model<orderAttributes, OrderCreationAttributes> {
   declare paidAt: Date
   declare isDelivered: boolean
   declare deliveredAt: Date
+  declare userId: string
+  declare shippingAddress?: ShippingAddress
+  declare paymentResult?: PaymentResult
+  declare orderItems?: OrderItem[]
 }
-
 Order.init(
   {
     id: {
@@ -66,5 +108,4 @@ Order.init(
     modelName: 'Order',
   }
 )
-
 export default Order

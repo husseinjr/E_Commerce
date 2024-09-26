@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt'
 import { generateToken } from '../utils'
 export const userRouter = express.Router()
 
+const maxAge = 30 * 24 * 60 * 60 // 30d
 // POST /api/users/signin
 userRouter.post(
   '/signin',
@@ -16,12 +17,10 @@ userRouter.post(
     })
     if (user) {
       if (bcrypt.compareSync(req.body.password, user.password)) {
-        res.json({
-          _id: user.id,
-          name: user.name,
-          email: user.email,
-          isAdmin: user.isAdmin,
-          token: generateToken(user),
+        const token = generateToken(user)
+        res.cookie('jwt', token, {
+          maxAge: maxAge * 1000,
+          httpOnly: true,
         })
         return
       }
@@ -40,12 +39,10 @@ userRouter.post(
       password,
       isAdmin: false,
     } as User)
-    res.json({
-      _id: user.id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-      token: generateToken(user),
+    const token = generateToken(user)
+    res.cookie('jwt', token, {
+      maxAge: maxAge * 1000,
+      httpOnly: true,
     })
   })
 )

@@ -5,40 +5,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const dbCon_1 = __importDefault(require("../connection/dbCon"));
-const hashPassword_1 = __importDefault(require("../../services/hashPassword"));
-class User extends sequelize_1.Model {
+class ShippingAddress extends sequelize_1.Model {
 }
-User.init({
-    id: {
-        type: sequelize_1.DataTypes.UUID,
-        defaultValue: sequelize_1.DataTypes.UUIDV4,
-        primaryKey: true,
-        allowNull: false,
-    },
-    name: {
+ShippingAddress.init({
+    fullName: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
-    isAdmin: {
-        type: sequelize_1.DataTypes.BOOLEAN,
-        defaultValue: false,
-    },
-    email: {
+    address: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
-        unique: true
     },
-    password: {
+    city: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
-        set(value) {
-            this.setDataValue('password', (0, hashPassword_1.default)(value));
-        },
     },
+    postalCode: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    },
+    country: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    },
+    lat: sequelize_1.DataTypes.FLOAT,
+    lng: sequelize_1.DataTypes.FLOAT,
 }, {
     sequelize: dbCon_1.default,
-    modelName: 'User',
-    tableName: 'users',
-    createdAt: true,
+    modelName: 'ShippingAddress',
 });
-exports.default = User;
+exports.default = ShippingAddress;

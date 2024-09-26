@@ -12,26 +12,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.productRouter = void 0;
+exports.seedRouter = void 0;
 const express_1 = __importDefault(require("express"));
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const dbSync_1 = __importDefault(require("../Database/connection/dbSync"));
-exports.productRouter = express_1.default.Router();
-exports.productRouter.get('/', (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const products = yield dbSync_1.default.models.Product.findAll();
-    res.status(201).json(products);
+const data_1 = require("../data");
+const data_2 = require("../data");
+exports.seedRouter = express_1.default.Router();
+exports.seedRouter.post('/products', (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const Product = dbSync_1.default.models.Product;
+    yield Product.destroy({ where: {} });
+    const createdProducts = yield Product.bulkCreate(data_1.products);
+    res.json({ createdProducts });
 })));
-exports.productRouter.get('/slug/:slug', (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { slug } = req.params;
-    const products = yield dbSync_1.default.models.Product.findAll({
-        where: {
-            slug,
-        },
-    });
-    if (products) {
-        res.status(201).json(products);
-    }
-    else {
-        res.status(404).json({ message: 'Product not found' });
-    }
+exports.seedRouter.post('/users', (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const UserModel = dbSync_1.default.models.User;
+    yield UserModel.destroy({ where: {} });
+    const createUsers = yield UserModel.bulkCreate(data_2.users);
+    res.json({ createUsers });
 })));
+// console.log('Products created:');
+// console.error('Error creating products:');

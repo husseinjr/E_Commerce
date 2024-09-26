@@ -21,7 +21,19 @@ type ProductCreationAttributes = Optional<
 ProductAttributes,
   'id' | 'createdAt' | 'updatedAt' | 'deletedAt'
 >
-class Product extends Model<ProductAttributes, ProductCreationAttributes> {}
+class Product extends Model<ProductAttributes, ProductCreationAttributes> {
+  declare id: string
+  declare name: string
+  declare slug: string
+  declare image: string
+  declare brand: string
+  declare category: string
+  declare description: string
+  declare price: number
+  declare countInStock: number
+  declare rating: number
+  declare numReviews: number
+}
 
 Product.init(
   {

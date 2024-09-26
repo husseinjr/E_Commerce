@@ -24,6 +24,7 @@ class PaymentResult extends Model<
   declare status: string
   declare update_time: number
   declare email_address: number
+    id: any
 }
 
 PaymentResult.init(

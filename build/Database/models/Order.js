@@ -5,40 +5,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const dbCon_1 = __importDefault(require("../connection/dbCon"));
-const hashPassword_1 = __importDefault(require("../../services/hashPassword"));
-class User extends sequelize_1.Model {
+class Order extends sequelize_1.Model {
 }
-User.init({
+Order.init({
     id: {
         type: sequelize_1.DataTypes.UUID,
         defaultValue: sequelize_1.DataTypes.UUIDV4,
         primaryKey: true,
-        allowNull: false,
     },
-    name: {
+    paymentMethod: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
-    isAdmin: {
+    itemsPrice: sequelize_1.DataTypes.FLOAT,
+    shippingPrice: sequelize_1.DataTypes.FLOAT,
+    taxPrice: sequelize_1.DataTypes.FLOAT,
+    totalPrice: sequelize_1.DataTypes.FLOAT,
+    isPaid: {
         type: sequelize_1.DataTypes.BOOLEAN,
         defaultValue: false,
     },
-    email: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-        unique: true
+    paidAt: sequelize_1.DataTypes.DATE,
+    isDelivered: {
+        type: sequelize_1.DataTypes.BOOLEAN,
+        defaultValue: false,
     },
-    password: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: false,
-        set(value) {
-            this.setDataValue('password', (0, hashPassword_1.default)(value));
-        },
-    },
+    deliveredAt: sequelize_1.DataTypes.DATE,
 }, {
     sequelize: dbCon_1.default,
-    modelName: 'User',
-    tableName: 'users',
-    createdAt: true,
+    modelName: 'Order',
 });
-exports.default = User;
+exports.default = Order;
