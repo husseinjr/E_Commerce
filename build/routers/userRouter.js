@@ -19,6 +19,7 @@ const User_1 = __importDefault(require("../Database/models/User"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const utils_1 = require("../utils");
 exports.userRouter = express_1.default.Router();
+const maxAge = 30 * 24 * 60 * 60; // 30d
 // POST /api/users/signin
 exports.userRouter.post('/signin', (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield User_1.default.findOne({
@@ -28,31 +29,42 @@ exports.userRouter.post('/signin', (0, express_async_handler_1.default)((req, re
     });
     if (user) {
         if (bcrypt_1.default.compareSync(req.body.password, user.password)) {
-            res.json({
-                _id: user.id,
-                name: user.name,
-                email: user.email,
-                isAdmin: user.isAdmin,
-                token: (0, utils_1.generateToken)(user),
-            });
-            return;
+            const token = (0, utils_1.generateToken)(user);
+            res
+                .cookie('jwt', token, {
+                maxAge: maxAge * 1000,
+                httpOnly: true,
+            })
+                .status(200)
+                .json({ message: 'Logged in successfully' });
+            return; // Add this return to prevent further execution
+        }
+        else {
+            res.status(404).json({ message: 'Invalid Email or Password' });
         }
     }
     res.status(404).json({ message: 'Invalid Email or Password' });
 })));
 exports.userRouter.post('/signup', (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, email, password } = req.body;
-    const user = yield User_1.default.create({
-        name,
-        email,
-        password,
-        isAdmin: false,
-    });
-    res.json({
-        _id: user.id,
-        name: user.name,
-        email: user.email,
-        isAdmin: user.isAdmin,
-        token: (0, utils_1.generateToken)(user),
-    });
+    try {
+        const user = yield User_1.default.create({
+            name,
+            email,
+            password,
+            isAdmin: false,
+        });
+        if (!user) {
+            res.status(401).json({ message: 'error in credintial' });
+        }
+        const token = (0, utils_1.generateToken)(user);
+        res.cookie('jwt', token, {
+            maxAge: maxAge * 1000,
+            httpOnly: true,
+        });
+        res.status(200).json({ message: 'signup successfully' });
+    }
+    catch (error) {
+        res.status(400).json(error);
+    }
 })));

@@ -23,14 +23,19 @@ dbCon_1.default.authenticate()
     .catch((err) => console.log('Unable to connect to the database: ', err));
 // Associations
 Order.belongsTo(User, { foreignKey: 'userId', as: 'user' });
-Order.belongsTo(PaymentResult, { foreignKey: 'paymentResultId', as: 'paymentResult' });
+Order.belongsTo(PaymentResult, {
+    foreignKey: 'paymentResultId',
+    as: 'paymentResult',
+});
 Order.hasOne(ShippingAddress, { foreignKey: 'orderId', as: 'shippingAddress' });
 Order.hasMany(OrderItem, { foreignKey: 'orderId', as: 'orderItems' });
 OrderItem.belongsTo(Order, { foreignKey: 'orderId' });
 OrderItem.belongsTo(Product, { foreignKey: 'productId' });
 ShippingAddress.belongsTo(Order, { foreignKey: 'orderId' });
 PaymentResult.hasOne(Order, { foreignKey: 'paymentResultId' });
-dbCon_1.default.sync()
+ShippingAddress.belongsTo(Order, { foreignKey: 'orderId', as: 'order' });
+OrderItem.belongsTo(Order, { foreignKey: 'orderId', as: 'order' });
+dbCon_1.default.sync({ force: true })
     .then(() => {
     console.log('connected successfully');
 })

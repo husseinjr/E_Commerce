@@ -33,12 +33,16 @@ const dbSync_1 = __importDefault(require("./Database/connection/dbSync"));
 const productRouter_1 = require("./routers/productRouter");
 const userRouter_1 = require("./routers/userRouter");
 const seedRouters_1 = require("./routers/seedRouters");
+const orderRouter_1 = require("./routers/orderRouter");
 const path_1 = __importDefault(require("path"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const keyRouter_1 = require("./routers/keyRouter");
 dbSync_1.default;
 const app = (0, express_1.default)();
 // view engine
 app.set('view engine', 'ejs');
 app.set('views', path_1.default.join(__dirname, 'views'));
+app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.json());
 app.use((0, express_1.urlencoded)({ extended: true }));
 const port = envConfig_1.PORT || 3000;
@@ -47,6 +51,8 @@ app.get('/', (req, res) => {
 });
 app.use('/api/products', productRouter_1.productRouter);
 app.use('/api/users', userRouter_1.userRouter);
+app.use('/api/orders', orderRouter_1.orderRouter);
+app.use('/api/keys', keyRouter_1.keyRouter);
 app.use('/test/data', seedRouters_1.seedRouter);
 app.use((req, res, next) => {
     res.status(404).render('404');
