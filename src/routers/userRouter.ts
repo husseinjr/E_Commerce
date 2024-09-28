@@ -68,7 +68,7 @@ userRouter.post(
   asyncHandler(async (req: Request, res: Response) => {
     res
       .cookie('jwt', '', { expires: new Date(0) })
-      .status(201)
+      .status(200)
       .json({ message: 'Token has been deleted' })
   })
 )
