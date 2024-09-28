@@ -1,11 +1,13 @@
 import { Model, DataTypes, Optional } from 'sequelize'
 import db from '../connection/dbCon'
+import Order from './Order'
 
 interface PaymentResultAttributes {
   paymentId: string
   status: string
   update_time: Date
   email_address: string
+  orderId?: string
   createdAt?: Date
   updatedAt?: Date
   deletedAt?: Date | null
@@ -24,7 +26,7 @@ class PaymentResult extends Model<
   declare status: string
   declare update_time: number
   declare email_address: number
-    id: any
+  id: any
 }
 
 PaymentResult.init(
@@ -44,6 +46,15 @@ PaymentResult.init(
     email_address: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    orderId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: Order, // Reference to the Order table
+        key: 'id',
+      },
+      primaryKey: true, // Part of the composite primary key
     },
   },
   {

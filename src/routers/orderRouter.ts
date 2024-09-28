@@ -8,6 +8,15 @@ import OrderItem from '../Database/models/Order_Item'
 import { verify } from 'crypto'
 export const orderRouter = express.Router()
 
+
+orderRouter.get('/mine', isAuth, asyncHandler( async (req: Request, res: Response) => {
+  const userID = await getUserId(req, res);
+  const orders = await Order.findAll({ where: {
+    userId: userID
+  }})
+res.json(orders)
+}))
+
 orderRouter.get(
   // http://localhost:5000/api/orders/:id
   '/:id',
@@ -92,6 +101,39 @@ orderRouter.post(
       })
     } catch (error) {
       res.status(500).json({ message: 'Order creation failed', error })
+    }
+  })
+)
+
+orderRouter.put(
+  '/:id/pay',
+  isAuth,
+  asyncHandler(async (req: Request, res: Response) => {
+    const order = await Order.findOne({
+      where: {
+        id: req.params.id,
+      },
+    })
+    const orderPayment = await PaymentResult.findOne({
+      where: { orderId: req.params.id },
+    })
+    if (order && orderPayment) {
+      order.isPaid = true
+      order.paidAt = new Date(Date.now())
+      ;(orderPayment.paymentId = req.body.id),
+        (orderPayment.status = req.body.status),
+        (orderPayment.update_time = req.body.update_time),
+        (orderPayment.email_address = req.body.email_address)
+      try {
+        orderPayment.save().then(() => {
+          order.save
+        })
+      } catch (error) {
+        res.status(404).send({ message: 'Unable to save the order' })
+      }
+      res.send({ message: 'Order has been paid successfully' })
+    } else {
+      res.status(404).send({ message: 'Unable to find the order' })
     }
   })
 )

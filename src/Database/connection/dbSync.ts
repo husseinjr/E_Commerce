@@ -34,7 +34,7 @@ PaymentResult.hasOne(Order, { foreignKey: 'paymentResultId' })
 ShippingAddress.belongsTo(Order, { foreignKey: 'orderId', as: 'order' })
 OrderItem.belongsTo(Order, { foreignKey: 'orderId', as: 'order' })
 
-db.sync()
+db.sync({force: true})
   .then(() => {
     console.log('connected successfully')
   })

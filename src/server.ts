@@ -9,6 +9,7 @@ import { seedRouter } from './routers/seedRouters'
 import { orderRouter } from './routers/orderRouter'
 import path from 'path'
 import cookieParser from 'cookie-parser'
+import { keyRouter } from './routers/keyRouter'
 
 db
 
@@ -30,6 +31,7 @@ app.get('/', (req: Request, res: Response) => {
 app.use('/api/products', productRouter)
 app.use('/api/users', userRouter)
 app.use('/api/orders', orderRouter)
+app.use('/api/keys', keyRouter)
 app.use('/test/data', seedRouter)
 
 app.use((req, res, next) => {
